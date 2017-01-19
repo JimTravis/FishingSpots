@@ -1,0 +1,148 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="FishingSpots.VisitDetails"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True" Loaded="PhoneApplicationPage_Loaded"
+    Style="{StaticResource TransitionPageStyle}">
+
+
+    <phone:PhoneApplicationPage.Resources>
+        
+        <DataTemplate x:Key="PhotoTemplate">
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Width="400" Height="400" Stretch="Uniform" Source="{Binding Thumb}" Margin="10" />
+            </Grid>
+            
+        </DataTemplate>
+
+    </phone:PhoneApplicationPage.Resources>
+
+
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <TextBlock Text="{Binding LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+        <phone:Pivot >
+            <phone:PivotItem Header="checkin" Margin="14,10,10,18">
+            <!-- TitlePanel contains the name of the application and page title-->
+        <!--<StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="{Binding LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="titleText" Text="checkin" Margin="10" FontSize="{StaticResource PhoneFontSizeLarge}" Tap="titleText_Tap"/>
+        </StackPanel>--> 
+                <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!--ContentPanel - place additional content here-->
+                    <Grid x:Name="ContentPanel" Margin="12,0,12,-15" Grid.RowSpan="2" DataContext="{Binding CurrentVisit}">
+                        
+                        <ScrollViewer x:Name="svCheckin">
+                            
+                            <StackPanel>
+                                <TextBlock x:Name="titleText" Text="checkin" Margin="10,0,5,5" FontSize="{StaticResource PhoneFontSizeLarge}" Tap="titleText_Tap"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding VisitDateTime}" Margin="5"/>
+                                </StackPanel>
+                                  
+                    
+                                <TextBlock Text="weather" Margin="5" Foreground="{StaticResource PhoneAccentBrush}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
+                                <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Weather}"  />
+                                    <TextBlock Text="{Binding Temp}" Margin="5,0,0,0"/>
+                                <TextBlock Text=" degrees" />
+                                </StackPanel>
+                                <TextBlock Text="caught" Margin="5" Foreground="{StaticResource PhoneAccentBrush}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Caught}" />                    
+                                    <TextBlock Text="{Binding Species}" Margin="5,0,0,0"/>
+                                </StackPanel>
+
+                                <TextBlock Text="bait" Margin="5" Foreground="{StaticResource PhoneAccentBrush}" FontSize="{StaticResource PhoneFontSizeLarge}"/>
+                                                                        
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding BaitColor}" />
+                                    <TextBlock Text="{Binding Bait}" Margin="5,0,0,0"/>
+                                    <TextBlock Text=" on a " Margin="5,0,0,0"/>
+                                    <TextBlock Text="{Binding Rig}" Margin="5,0,0,0"/>
+                                </StackPanel>
+
+                                <TextBlock Text="water" Foreground="{StaticResource PhoneAccentBrush}" Margin="5" FontSize="{StaticResource PhoneFontSizeLarge}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="temp: "/>
+                                    <TextBlock Text="{Binding WaterTemp}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="depth: "/>
+                                    <TextBlock Text="{Binding Depth}" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="tide: "/>
+                                    <TextBlock Text="{Binding Tide}" />
+                                </StackPanel>
+                    
+                                <toolkit:Rating Value="{Binding Rating}" IsEnabled="False" Margin="5">
+                                    <toolkit:Rating.FilledItemStyle>
+                                        <Style TargetType="toolkit:RatingItem">
+                                            <Setter Property="Background" Value="Gold" />
+                                        </Style>
+                                    </toolkit:Rating.FilledItemStyle>
+                                    <toolkit:Rating.UnfilledItemStyle>
+                                        <Style TargetType="toolkit:RatingItem">
+                                            <Setter Property="Background" Value="Gray" />
+                                        </Style>
+                                    </toolkit:Rating.UnfilledItemStyle>
+                                </toolkit:Rating>
+                                <TextBlock Text="{Binding Note}" Height="158"/>
+                
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </phone:PivotItem>
+
+            <phone:PivotItem x:Name="visitPhotosPivotItem" Header="photos">
+                <Grid x:Name="ContentPanel2">
+                    <phone:LongListSelector x:Name="photoList" ItemsSource="{Binding VisitPhotos}" ItemTemplate="{StaticResource PhotoTemplate}" SelectionChanged="photoList_SelectionChanged" Margin="0,-26,0,0"/>
+                </Grid>
+            </phone:PivotItem>
+            
+        </phone:Pivot>
+        
+    </Grid>
+
+
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+
+            <shell:ApplicationBarIconButton 
+                IconUri="/Images/edit.png" 
+                Text="edit" 
+                x:Name="editCheckinAppBarButton" Click="editCheckinAppBarButton_Click" 
+                />
+            
+            <shell:ApplicationBarIconButton 
+                IconUri="/Images/delete.png" 
+                Text="delete" 
+                x:Name="delCheckinAppBarButton" 
+                Click="delCheckinAppBarButton_Click"/>
+            
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
+
+</phone:PhoneApplicationPage>

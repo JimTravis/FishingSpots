@@ -1,0 +1,73 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="FishingSpots.Settings"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:my="clr-namespace:Microsoft.Live.Controls;assembly=Microsoft.Live.Controls"
+
+
+    Style="{StaticResource TransitionPageStyle}"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+  
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="{Binding LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock  Text="settings" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"> 
+            <StackPanel x:Name="SettingsStack">
+            <CheckBox  Content="enable location services" x:Name="chkEnableLoc" IsChecked="{Binding LocationConsent, Mode=TwoWay}" />
+            <!--<CheckBox  Content="track my location as I move" x:Name="chkTrackLoc" IsChecked="{Binding TrackingSetting, Mode=TwoWay}" />-->
+                <TextBlock Text="OneDrive" HorizontalAlignment="Center" Foreground="{StaticResource PhoneAccentBrush}"/>
+                <my:SignInButton Name="btnSignIn" />
+                <Button x:Name="btnBackup" Click="btnBackup_Click" Content="Backup" IsEnabled="False"  />
+                <Button x:Name="btnRestore" Click="btnRestore_Click" Content="Restore" IsEnabled="False" />                
+            </StackPanel>
+            <StackPanel x:Name="ProgressStack" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressBar x:Name="pgBackup" IsIndeterminate="True" Visibility="Collapsed"/>
+                <TextBlock x:Name="backupStatus" TextWrapping="Wrap" Margin="12, 30, 12, 12"/>                
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar x:Name="appbar" IsVisible="True" IsMenuEnabled="True">
+
+            <shell:ApplicationBarIconButton 
+                IconUri="/Images/appbar.star.png" 
+                Text="rate me!" 
+                x:Name="rateMeAppBarButton" 
+                Click="rateMeAppBarButton_Click"/>
+
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="edit species" Click="ApplicationBarMenuItemAllSpecies_Click"/>
+                <shell:ApplicationBarMenuItem Text="edit baits" Click="ApplicationBarMenuItemAllBaits_Click"/>
+                <shell:ApplicationBarMenuItem Text="edit rigs" Click="ApplicationBarMenuItemAllRigs_Click"/>
+                <shell:ApplicationBarMenuItem Text="edit bait colors" Click="ApplicationBarMenuItemAllBaitColors_Click"/>
+            </shell:ApplicationBar.MenuItems>
+
+            
+        </shell:ApplicationBar>
+        
+        </phone:PhoneApplicationPage.ApplicationBar>
+
+</phone:PhoneApplicationPage>

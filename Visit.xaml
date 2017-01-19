@@ -1,0 +1,219 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="FishingSpots.Visit"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True" Loaded="PhoneApplicationPage_Loaded"
+    Style="{StaticResource TransitionPageStyle}">
+
+
+    <phone:PhoneApplicationPage.Resources>
+        <DataTemplate x:Key="TemperatureItemsTemplate">
+            <TextBlock Text="{Binding BindsDirectlyToSource=True}" 
+                       FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="BaitItemsTemplate">
+            <TextBlock Text="{Binding BaitName}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="BaitFMItemsTemplate">
+            <TextBlock Text="{Binding BaitName}"
+                       FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="RigItemsTemplate">
+            <TextBlock Text="{Binding RigName}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="RigFMItemsTemplate">
+            <TextBlock Text="{Binding RigName}"
+                       FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="BaitColorsTemplate">
+            <TextBlock Text="{Binding BaitColorName}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="BaitColorsFMItemsTemplate">
+            <TextBlock Text="{Binding BaitColorName}"
+                    FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SpeciesTemplate">
+            <TextBlock Text="{Binding SpeciesName}"/>
+        </DataTemplate>
+        <DataTemplate x:Key="SpeciesFMItemsTemplate">
+            <TextBlock Text="{Binding SpeciesName}"
+                    FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="PhotoTemplate">
+
+            <Grid Tap="Grid_Tap">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Width="400" Height="400" Stretch="Uniform" Source="{Binding Thumb}" Margin="10" Tap="Image_Tap" />
+            </Grid>
+
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
+
+
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <phone:Pivot x:Name="visitPivot" Title="{Binding LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" SelectionChanged="visitPivot_SelectionChanged">
+            <phone:PivotItem x:Name="visitPivotItem" Header="checkin">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+        
+                    <!--ContentPanel - place additional content here-->
+                    <Grid x:Name="ContentPanel"  Grid.RowSpan="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+
+                        </Grid.ColumnDefinitions>
+                        <ScrollViewer Margin="0,-12,0,0">
+                        <StackPanel Height="1533">
+                
+            
+                            <TextBlock Margin="10,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="temp"  Foreground="#FF969696"/>
+                            <TextBox x:Name="TempText" HorizontalAlignment="Left" Height="72" TextWrapping="Wrap"  Width="113" AcceptsReturn="True" InputScope="Number" Foreground="White" Background="#BF000000" BorderBrush="White" GotFocus="TempText_GotFocus" LostFocus="TempText_LostFocus" TextChanged="TempText_TextChanged"/>
+                   
+                                <toolkit:ListPicker 
+                    	            x:Name="WeatherLP"
+                    	            Header="weather"                                
+                    	            FullModeHeader="choose weather" 
+                    	            FullModeItemTemplate="{StaticResource TemperatureItemsTemplate}"
+                    	            HorizontalAlignment="Left" Height="95"    Width="348" 
+                    	            ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="-1" FontSize="{StaticResource PhoneFontSizeNormal}" ToolTipService.ToolTip="choose weather"/>
+                            <TextBlock Margin ="10,0,0,0" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="caught"  Foreground="#FF969696" RenderTransformOrigin="0.879,12.505"/>
+                            <TextBox x:Name="CaughtText" HorizontalAlignment="Left" Height="75"  TextWrapping="Wrap" Width="113" AcceptsReturn="True" InputScope="Number" Foreground="White" Background="#BF000000" BorderBrush="White" GotFocus="TempText_GotFocus" LostFocus="TempText_LostFocus"/>
+                
+                            <toolkit:ListPicker
+            	            x:Name="SpeciesLP"
+            	            Header="species"
+                            ItemsSource="{Binding AllSpecies}"
+                            ItemTemplate="{StaticResource SpeciesTemplate}"
+            	            FullModeHeader="choose species" 
+            	            FullModeItemTemplate="{StaticResource SpeciesFMItemsTemplate}"
+            	            HorizontalAlignment="Left" Height="95" Width="203" 
+            	            ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="-1" FontSize="{StaticResource PhoneFontSizeNormal}" ToolTipService.ToolTip="choose species"/>
+
+                
+                        <toolkit:ListPicker 
+                                            x:Name="BaitLP"
+                                            Header="bait"
+                                            ItemsSource="{Binding AllBaits}"
+                                            ItemTemplate="{StaticResource BaitItemsTemplate}"
+                                            FullModeItemTemplate="{StaticResource BaitFMItemsTemplate}"
+                                            FullModeHeader="choose bait"                                
+                                            HorizontalAlignment="Left" Height="108"     Width="145" 
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="-1" FontSize="{StaticResource PhoneFontSizeNormal}" ToolTipService.ToolTip="choose bait"/>
+
+                                
+                                <toolkit:ListPicker 
+                                            x:Name="BaitColorLP"
+                                            Header="bait color"
+                                            ItemsSource="{Binding AllBaitColors}"
+                                            ItemTemplate="{StaticResource BaitColorsTemplate}"
+                                            FullModeHeader="choose bait color" 
+                                            FullModeItemTemplate="{StaticResource BaitColorsFMItemsTemplate}"
+                                            HorizontalAlignment="Left" Height="102"   Width="180" 
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="-1" FontSize="{StaticResource PhoneFontSizeNormal}" ToolTipService.ToolTip="choose bait color"/>
+
+                                <toolkit:ListPicker 
+                                            x:Name="RigLP"
+                                            Header="rig"
+                                            ItemsSource="{Binding AllRigs}"
+                                            ItemTemplate="{StaticResource RigItemsTemplate}"
+                                            FullModeItemTemplate="{StaticResource RigFMItemsTemplate}"
+                                            FullModeHeader="choose rig"                                
+                                            HorizontalAlignment="Left" Height="108"     Width="145" 
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="-1" FontSize="{StaticResource PhoneFontSizeNormal}" ToolTipService.ToolTip="choose rig"/>
+
+
+                                <TextBlock Margin="10,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="water temp"  Foreground="#FF969696"/>
+                            <TextBox x:Name="WaterTempText" HorizontalAlignment="Left" Height="72"  TextWrapping="Wrap" VerticalAlignment="Top" Width="113" AcceptsReturn="True" InputScope="Number" Foreground="White" Background="#BF000000" BorderBrush="White" GotFocus="TempText_GotFocus" LostFocus="TempText_LostFocus"/>
+
+                            <TextBlock Margin="10,0,0,0" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="depth"  Foreground="#FF969696"/>
+                            <TextBox x:Name="DepthText" HorizontalAlignment="Left" Height="75"  TextWrapping="Wrap" VerticalAlignment="Top" Width="113" AcceptsReturn="True" InputScope="Number" Foreground="White" Background="#BF000000" BorderBrush="White" GotFocus="TempText_GotFocus" LostFocus="TempText_LostFocus"/>
+
+                            <toolkit:ListPicker 
+                                            x:Name="TideLP"
+                                            Header="tide"
+                                            FullModeHeader="choose tide" 
+                                           FullModeItemTemplate="{StaticResource TemperatureItemsTemplate}"
+                                            HorizontalAlignment="Left" Height="97"     Width="248" 
+                                            ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="-1" FontSize="{StaticResource PhoneFontSizeNormal}" ToolTipService.ToolTip="choose tide">
+
+                            </toolkit:ListPicker>
+
+                                <toolkit:Rating x:Name ="visitRating" Margin="0,0,10,0">
+                                    <toolkit:Rating.FilledItemStyle>
+                                        <Style TargetType="toolkit:RatingItem">
+                                            <Setter Property="Background" Value="Gold" />
+                                        </Style>
+                                    </toolkit:Rating.FilledItemStyle>
+                                    <toolkit:Rating.UnfilledItemStyle>
+                                        <Style TargetType="toolkit:RatingItem">
+                                            <Setter Property="Background" Value="Gray" />
+                                        </Style>
+                                    </toolkit:Rating.UnfilledItemStyle>
+                                </toolkit:Rating>
+
+                                <TextBlock Margin="10,0,0,0" HorizontalAlignment="Left" TextWrapping="Wrap" Text="notes" Foreground="#FF969696"/>
+                                <TextBox x:Name="NoteText" AcceptsReturn="True" HorizontalAlignment="Left" Height="200" Width ="456" TextWrapping="Wrap" />
+                          </StackPanel>
+                        </ScrollViewer>
+                    </Grid>
+                </Grid>
+            </phone:PivotItem>
+            
+            <phone:PivotItem x:Name="visitPhotosPivotItem" Header="photos">
+                <Grid x:Name="ContentPanel2">
+                    <phone:LongListSelector x:Name="photoList" ItemsSource="{Binding VisitPhotos}" ItemTemplate="{StaticResource PhotoTemplate}"/>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
+        
+        <StackPanel x:Name="TaskStack" Visibility="Collapsed" Background="Gray" Height="180" >
+            <TextBlock x:Name="txtCam" Margin="5" Text="camera" FontSize="{StaticResource PhoneFontSizeExtraLarge}" Tap="txtCam_tap" />
+            <TextBlock x:Name="txtPick" Margin="5" Text="choose..." FontSize="{StaticResource PhoneFontSizeExtraLarge}" Tap="txtPick_tap"/>
+        </StackPanel>
+
+    </Grid>
+
+
+    <!--<phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+
+            <shell:ApplicationBarIconButton 
+                IconUri="/Images/save.png" 
+                Text="save" 
+                x:Name="saveCheckinAppBarButton" 
+                Click="saveCheckinAppBarButton_Click"/>
+
+            <shell:ApplicationBarIconButton 
+                IconUri="/Images/cancel.png" 
+                Text="cancel" 
+                x:Name="cancelCheckinAppBarButton" 
+                Click="cancelCheckinAppBarButton_Click"/>
+
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>-->
+
+
+</phone:PhoneApplicationPage>

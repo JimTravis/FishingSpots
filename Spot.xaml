@@ -1,0 +1,157 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="FishingSpots.Spot"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True" Loaded="PhoneApplicationPage_Loaded" Margin="0,-2,0,2"
+    Style="{StaticResource TransitionPageStyle}">
+
+
+    <phone:PhoneApplicationPage.Resources>
+        <DataTemplate x:Key="VisitsItemTemplate">
+
+            <Grid HorizontalAlignment="Stretch" Width="420"  Background="LightSteelBlue" Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock 
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+        			    Text="{Binding VisitDateTime}" 
+                        Margin="5"
+        			    FontSize="{StaticResource PhoneFontSizeLarge}" 
+                        Grid.Row="0"  
+                        Foreground="Black"
+        			 />
+                    <StackPanel Orientation="Horizontal" Grid.Row="1">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Text="{Binding Caught}"
+                            TextTrimming="WordEllipsis"
+                            Margin="5"
+                            FontSize="{StaticResource PhoneFontSizeMedium}" 
+        			        Foreground="Black"/>
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            Text="{Binding Species}"
+                            TextTrimming="WordEllipsis"
+                            Margin="5"
+                            FontSize="{StaticResource PhoneFontSizeMedium}" 
+        			        Foreground="Black" />
+                    </StackPanel>
+
+                    <toolkit:Rating   BorderBrush="White" Foreground="DarkGoldenrod" Background="LightSteelBlue" Value="{Binding Rating}" Height="30" Width="165" Grid.Row="2" HorizontalAlignment="Left" Margin="5" ReadOnly="True">
+                        <toolkit:Rating.FilledItemStyle>
+                            <Style TargetType="toolkit:RatingItem">
+                                <Setter Property="Background" Value="Goldenrod" />
+                            </Style>
+                        </toolkit:Rating.FilledItemStyle>
+                        <toolkit:Rating.UnfilledItemStyle>
+                            <Style TargetType="toolkit:RatingItem">
+                                <Setter Property="Background" Value="Gray" />
+                            </Style>
+                        </toolkit:Rating.UnfilledItemStyle>
+                    </toolkit:Rating>
+                </Grid>
+            </Grid>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <!--Pivot Control-->
+        <phone:Pivot x:Name="spotpivot" Title="{Binding LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" LoadedPivotItem="spotpivot_LoadedPivotItem">
+            <!--Pivot item one-->
+            <phone:PivotItem x:Name="pivotitem1" Header="spot" Margin="12,25,12,90">
+                <Grid x:Name="ContentPanel">
+
+                    <ProgressBar x:Name="pgLoc" IsIndeterminate="True" VerticalAlignment="Top" Visibility="Collapsed" />
+                    <Image  x:Name="imgThumb" Stretch="Uniform" Height ="135" Width="135"  Source="{Binding Thumb}" Tap="imgThumb_Tap" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                    <TextBlock Foreground="{StaticResource PhoneAccentBrush}" HorizontalAlignment="Left" Margin="10,21,0,10" TextWrapping="Wrap" Text="latitude" VerticalAlignment="Top"/>
+                    <TextBlock Foreground="{StaticResource PhoneAccentBrush}" HorizontalAlignment="Left" Margin="10,71,0,10" TextWrapping="Wrap" Text="longitude" VerticalAlignment="Top"/>
+                    <TextBlock Foreground="{StaticResource PhoneAccentBrush}" FontSize="{StaticResource PhoneFontSizeLarge}" HorizontalAlignment="Left" Margin="10,129,0,0" TextWrapping="Wrap" Text="name" VerticalAlignment="Top"/>
+                    <TextBlock Foreground="{StaticResource PhoneAccentBrush}" FontSize="{StaticResource PhoneFontSizeLarge}" HorizontalAlignment="Left" Margin="10,223,0,0" TextWrapping="Wrap" Text="description" VerticalAlignment="Top"/>
+                    <StackPanel x:Name="InputStack" Visibility="Collapsed" >
+                        <Grid>
+                            <TextBox x:Name ="latBlock" Text="{Binding Latitude, Mode=TwoWay}" HorizontalAlignment="Left" Height="72" Width="225" Margin="95,0,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.458,-1.766" />
+                            <TextBox x:Name ="longBlock" Text="{Binding Longitude, Mode=TwoWay}" HorizontalAlignment="Left" Height="72" Width="225" Margin="95,56,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.458,-1.766" />
+                            <!-- <toolkit:Rating Value="{Binding Rating}" x:Name="RatingControl" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="41" Margin="123,0,118,-70"/>-->
+                            <TextBox Text="{Binding SpotName}" x:Name="NameTextBox" HorizontalAlignment="Left" Height="72" Margin="0,163,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="456"/>
+                            <TextBox Text="{Binding Description}" x:Name ="DescriptionTextBox" HorizontalAlignment="Left" Height="200" Margin="0,258,0,-24" TextWrapping="Wrap"  VerticalAlignment="Top" Width="456" AcceptsReturn="True"/>
+                        </Grid>
+                    </StackPanel>
+                    <StackPanel x:Name="DisplayStack" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="37*"/>
+                                <ColumnDefinition Width="20*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock  Text="{Binding Latitude}" HorizontalAlignment="Left" Height="27" Margin="129,21,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.458,-1.766" />
+                            <TextBlock  Text="{Binding Longitude}" HorizontalAlignment="Left" Height="27" Margin="129,71,0,0" TextWrapping="Wrap" VerticalAlignment="Top" RenderTransformOrigin="0.458,-1.766" />
+                            <TextBlock Text="{Binding SpotName}" HorizontalAlignment="Left" Height="48" Margin="18,177,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="429" RenderTransformOrigin="0.389,4.729" Grid.ColumnSpan="2"/>
+                            <TextBlock Text="{Binding Description}" HorizontalAlignment="Left" Height="167" Margin="17,272,0,-101" TextWrapping="Wrap"  VerticalAlignment="Top" Width="429" Grid.ColumnSpan="2"/>
+                            <toolkit:Rating Value="{Binding Rating}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Height="41" Margin="123,0,118,-167" ReadOnly="True" Grid.ColumnSpan="2">
+                                <toolkit:Rating.FilledItemStyle>
+                                    <Style TargetType="toolkit:RatingItem">
+                                        <Setter Property="Background" Value="Gold" />
+                                    </Style>
+                                </toolkit:Rating.FilledItemStyle>
+                                <toolkit:Rating.UnfilledItemStyle>
+                                    <Style TargetType="toolkit:RatingItem">
+                                        <Setter Property="Background" Value="Gray" />
+                                    </Style>
+                                </toolkit:Rating.UnfilledItemStyle>
+                            </toolkit:Rating>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+            </phone:PivotItem>
+
+            <phone:PivotItem x:Name="pivotitem2"  Header="checkins" Margin="12,25,12,90">
+                <Grid x:Name="ContentPanel2">
+
+                    <phone:LongListSelector
+                        x:Name="visitsItems"  
+                        ItemsSource="{Binding SpotVisits}" 
+                        ItemTemplate="{StaticResource VisitsItemTemplate}"  SelectionChanged="visitsItems_SelectionChanged">
+                    </phone:LongListSelector>
+                </Grid>
+            </phone:PivotItem>
+
+            <!--Pivot item two-->
+            <!--<phone:PivotItem Header="item2">
+                <Grid/>
+            </phone:PivotItem> -->
+        </phone:Pivot>
+
+        <StackPanel x:Name="TaskStack" Visibility="Collapsed" Background="Gray" Height="180">
+            <TextBlock x:Name="txtCam" Margin="5" Text="camera" FontSize="{StaticResource PhoneFontSizeExtraLarge}" Tap="txtCam_tap" />
+            <TextBlock x:Name="txtPick" Margin="5" Text="choose..." FontSize="{StaticResource PhoneFontSizeExtraLarge}" Tap="txtPick_tap"/>
+        </StackPanel>
+
+
+    </Grid>
+
+
+
+</phone:PhoneApplicationPage>
