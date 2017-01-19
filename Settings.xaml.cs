@@ -55,7 +55,7 @@ namespace FishingSpots
 
     
            // SignIn button
-           btnSignIn.ClientId = "000000004410EF6D";
+           btnSignIn.ClientId = "[client ID goes here]";
            btnSignIn.Scopes = "wl.basic wl.signin wl.offline_access wl.skydrive wl.skydrive_update";
            btnSignIn.Branding = BrandingType.Skydrive;
            btnSignIn.TextType = ButtonTextType.SignIn;
